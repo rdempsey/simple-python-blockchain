@@ -15,11 +15,13 @@ Options:
 
 """
 
-from docopt import docopt
-from datetime import datetime
-from spb.lib.block import Block
-import os
 import logging
+import os
+from datetime import datetime
+
+from docopt import docopt
+
+from spb.lib.block import Block
 
 
 def run_spb(args):

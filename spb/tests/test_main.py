@@ -1,8 +1,9 @@
+import os
+
 import pytest
 from mock import MagicMock, patch
+
 from spb import __main__ as spb_main
-import os
-import sys
 
 
 @pytest.fixture
