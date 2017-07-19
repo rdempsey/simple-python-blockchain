@@ -1,4 +1,4 @@
-import hashlib as hasher
+import hashlib
 
 
 class Block:
@@ -10,7 +10,7 @@ class Block:
         self.hash = self._hash_block()
 
     def _hash_block(self):
-        sha = hasher.sha256()
+        sha = hashlib.sha256()
         encoded_data = self._encode_data_for_hash_update()
         sha.update(encoded_data)
         return sha.hexdigest()

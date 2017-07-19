@@ -12,3 +12,12 @@ To run the code do the following:
 * Make the main file executable: `chmod +x bin/spb`
 * View the help screen to see all the options: `bin/spb -h`
 * Run the app and have it generate 20 blocks: `bin/spb spb INFO 20`
+
+## Run the Tests
+
+After you've performed all of the above steps you can run the tests with pytest and create a coverage report in html format.
+Run the following command in the root directory:
+
+```
+pytest --cov=spb spb/tests/ --cov-report html && open htmlcov/index.html
+```

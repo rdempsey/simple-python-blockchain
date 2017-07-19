@@ -1,0 +1,9 @@
+[run]
+omit =
+    spb/tests/*
+    spb/lib/__init__.py
+    spb/__init__.py
+
+[html]
+directory = htmlcov
+title = SPB Coverage Report

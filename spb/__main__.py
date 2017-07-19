@@ -17,20 +17,19 @@ Options:
 
 from docopt import docopt
 from datetime import datetime
-from lib.block import Block
-from os import path, makedirs
+from spb.lib.block import Block
+import os
 import logging
 
 
-def run_spb():
-    args = docopt(__doc__, version='Simple Python Blockchain 0.1.0')
-
+def run_spb(args):
     _logger = _create_logger(args=args)
 
-    blockchain = [_create_genesis_block()]
-
-    num_blocks_to_add = int(args['<num-blocks-to-create>'])
-    _add_blocks_to_blockchain(num_blocks_to_add=num_blocks_to_add, blockchain=blockchain, logger=_logger)
+    blockchain = []
+    _add_genesis_block_to_blockchain(blockchain=blockchain)
+    _add_blocks_to_blockchain(num_blocks_to_add=int(args['<num-blocks-to-create>']),
+                              blockchain=blockchain,
+                              logger=_logger)
 
 
 def _create_logger(args):
@@ -49,7 +48,7 @@ def _create_logger(args):
 
         _make_directory(log_dir)
 
-        log_file_path = path.join(log_dir, log_file_name)
+        log_file_path = os.path.join(log_dir, log_file_name)
         fh = logging.FileHandler(filename=log_file_path)
         fh.setLevel(log_level)
         formatter = logging.Formatter(logging_format)
@@ -60,27 +59,15 @@ def _create_logger(args):
 
 
 def _make_directory(directory_path):
-    """
-    Make a directory if it doesn't already exist
-    :param directory_path: full path to the directory
-    :return: directory_path
-    """
-    if not path.exists(directory_path):
-        makedirs(directory_path)
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
 
     return directory_path
 
 
-def _create_genesis_block():
-    return Block(0, datetime.now(), "Genesis Block", "0")
-
-
-def _create_block(last_block):
-    this_index = last_block.index + 1
-    this_timestamp = datetime.now()
-    this_data = "Hey! I'm block " + str(this_index)
-    this_hash = last_block.hash
-    return Block(this_index, this_timestamp, this_data, this_hash)
+def _add_genesis_block_to_blockchain(blockchain):
+    genesis_block = Block(index=0, timestamp=datetime.utcnow(), data="Genesis Block", previous_hash="0")
+    blockchain.append(genesis_block)
 
 
 def _add_blocks_to_blockchain(num_blocks_to_add, blockchain, logger):
@@ -92,5 +79,14 @@ def _add_blocks_to_blockchain(num_blocks_to_add, blockchain, logger):
         logger.info("Hash: {}\n".format(block_to_add.hash))
 
 
+def _create_block(last_block):
+    b_index = last_block.index + 1
+    b_timestamp = datetime.utcnow()
+    b_data = "Hey! I'm block " + str(b_index)
+    b_hash = last_block.hash
+    return Block(index=b_index, timestamp=b_timestamp, data=b_data, previous_hash=b_hash)
+
+
 if __name__ == '__main__':
-    run_spb()
+    args = docopt(__doc__, version='Simple Python Blockchain 0.1.0')
+    run_spb(args=args)
